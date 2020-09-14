@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>German Site</title>
+  </head>
+  <body>
+
+    <div class="header">
+      <h1 class="firstH1">German Vocabulary</h1>
+      <img class="thumbsUp" src="images/thumbsUp.png" />
+    </div>
+
+    <div>
+      <h3>Add a New Word</h3>
+    </div>
+
+    <div id="formDiv" class="container">
+      <div class="row justify-content-around">
+        <div class="col-md-5">
+          <form id="noun">
+              <input type="text" class="form-control" name="noun" placeholder="new noun">
+          </form>
+
+        </div>
+        <div class="col-md-5">
+          <form id="verb">
+              <input type="text" class="form-control" name="verb" placeholder="new verb">
+          </form>
+        </div>
+      </div>
+
+        <div class="w-100"></div>
+
+      <div class="row justify-content-around">
+        <div class="col-md-5">
+          <form id="adjective">
+              <input type="text" class="form-control" name="adjective" placeholder="new adjective/adverb">
+          </form>
+        </div>
+        <div class="col-md-5">
+          <form id="other">
+              <input type="text" class="form-control" name="other" placeholder="new other word">
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="recentlyAdded">
+      <h3>Recently Added</h3>
+
+      <p>
+        Display list of recently added words by word family
+      </p>
+
+      <button type="button" name="noun" class="recentButton listBtn btn btn-outline-secondary nouns">Nouns</button>
+      <button type="button" name="verb" class="recentButton listBtn btn btn-outline-secondary">Verbs</button>
+      <button type="button" name="adjective" class="recentButton listBtn btn btn-outline-secondary">Adjs/Advs</button>
+      <button type="button" name="other" class="recentButton listBtn btn btn-outline-secondary">Other</button>
+    </div>
+
+    <ul id="recentList" class="list-group"></ul>
+
+    <div class="highFrequency">
+      <h3>High Frequency Words</h3>
+
+      <p>
+        Display list of high frequency words by word family
+      </p>
+
+      <button type="button" name="noun" class="frequentButton listBtn btn btn-outline-secondary">Nouns</button>
+      <button type="button" name="verb" class="frequentButton listBtn btn btn-outline-secondary">Verbs</button>
+      <button type="button" name="adjective" class="frequentButton listBtn btn btn-outline-secondary">Adjs/Advs</button>
+      <button type="button" name="other" class="frequentButton listBtn btn btn-outline-secondary">Other</button>
+    </div>
+
+    <ul id="frequentList" class="list-group"></ul>
+
+    <div class="learned">
+      <h3>Learned</h3>
+
+      <p>
+        Display list of learned words by word family
+      </p>
+
+      <button type="button" name="noun" class="learnedButton listBtn btn btn-outline-secondary">Nouns</button>
+      <button type="button" name="verb" class="learnedButton listBtn btn btn-outline-secondary">Verbs</button>
+      <button type="button" name="adjective" class="learnedButton listBtn btn btn-outline-secondary">Adjs/Advs</button>
+      <button type="button" name="other" class="learnedButton listBtn btn btn-outline-secondary">Other</button>
+    </div>
+
+    <ul id="learnedList" class="list-group"></ul>
+
+
+
+    <!-- Firebase -->
+
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-firestore.js"></script>
+    <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyBg1fYjr_NBlEQ9m-gGBxMQBxbgw1QK6cU",
+        authDomain: "germansite2020.firebaseapp.com",
+        databaseURL: "https://germansite2020.firebaseio.com",
+        projectId: "germansite2020",
+        storageBucket: "germansite2020.appspot.com",
+        messagingSenderId: "707527593601",
+        appId: "1:707527593601:web:28300fdadfdd2d2fd7c780",
+        measurementId: "G-1056VZKRB9"
+      };
+      firebase.initializeApp(firebaseConfig);
+      const db = firebase.firestore();
+    </script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="index.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+  </body>
+</html>
