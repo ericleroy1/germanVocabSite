@@ -10,7 +10,55 @@ body {
   padding: 1rem;
   background-color: #E1F5F5 !important;
 }
+
+h1 {
+  font-size: 4rem;
+  text-align: center;
+  margin-top: 5rem;
+}
+
+.navForm {
+  width: 100%;
+}
+
+.navbtn {
+  width: 15%;
+}
+
+.signoutbtn {
+  margin-left: 7%;
+}
+
+.landingButtons {
+  position: absolute;
+  top: 65%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.btn-lg {
+  width: 120px;
+  margin: 1rem;
+}
+
+.form-signin {
+  margin: auto;
+  margin-top: 65%;
+  width: 40%;
+}
+
+.form-register {
+  margin: auto;
+  margin-top: 65%;
+  width: 40%;
+}
+
+.form-control {
+  margin-bottom: 5px;
+}
+
 .wordForm {
+
   margin-bottom: 3rem;
 }
 
