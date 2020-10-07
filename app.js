@@ -30,9 +30,21 @@ mongoose.connect("mongodb://localhost:27017/germanDB", {
 mongoose.set('useCreateIndex', true);
 
 
+
+const wordsSchema = new Schema({
+  word: String,
+  timeStamp: Date,
+  frequency: Number
+});
+const Word = mongoose.model("Word", wordsSchema);
+
 const userSchema = new Schema({
   email: String,
-  password: String
+  password: String,
+  nouns: [wordsSchema],
+  verbs: [wordsSchema],
+  adjectives: [wordsSchema],
+  others: [wordsSchema]
 });
 
 userSchema.plugin(passportLocalMongoose);
@@ -43,19 +55,6 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// app.use(function(req, res, next){
-//   let currentUser = req.user;
-//   next();
-//   console.log(currentUser);
-// });
-
-
-const wordsSchema = new Schema({
-  word: String,
-  type: String,
-  userId: String
-});
-const Word = mongoose.model("Word", wordsSchema);
 
 
 
@@ -79,7 +78,8 @@ app.get('/home', (req, res)=>{
 app.get('/nouns', (req, res)=>{
   if (req.isAuthenticated()){
     let currentUser = req.user.username;
-    res.render('nouns', {currentUser: currentUser});
+    let nouns = req.user.nouns;
+    res.render('nouns', {currentUser: currentUser, nounsList: nouns});
   } else {
     res.redirect('/login')
   }
@@ -87,7 +87,8 @@ app.get('/nouns', (req, res)=>{
 app.get('/verbs', (req, res)=>{
   if (req.isAuthenticated()){
     let currentUser = req.user.username;
-    res.render('verbs', {currentUser: currentUser});
+    let verbs = req.user.verbs;
+    res.render('verbs', {currentUser: currentUser, verbsList: verbs});
   } else {
     res.redirect('/login')
   }
@@ -95,7 +96,8 @@ app.get('/verbs', (req, res)=>{
 app.get('/adjectives', (req, res)=>{
   if (req.isAuthenticated()){
     let currentUser = req.user.username;
-    res.render('adjectives', {currentUser: currentUser});
+    let adjectives = req.user.adjectives;
+    res.render('adjectives', {currentUser: currentUser, adjectivesList: adjectives});
   } else {
     res.redirect('/login')
   }
@@ -103,10 +105,15 @@ app.get('/adjectives', (req, res)=>{
 app.get('/others', (req, res)=>{
   if (req.isAuthenticated()){
     let currentUser = req.user.username;
-    res.render('others', {currentUser: currentUser});
+    let others = req.user.others;
+    res.render('others', {currentUser: currentUser, othersList: others});
   } else {
     res.redirect('/login')
   }
+});
+app.get('/logout', (req, res)=>{
+  req.logout();
+  res.redirect('/')
 });
 
 
@@ -133,6 +140,66 @@ app.post('/login', (req, res)=>{
       res.redirect('/home')
     })}
   });
+});
+
+app.post('/homeNoun', (req, res)=>{
+  const newWord = new Word({
+    word: req.body.noun,
+    timeStamp: Date.now(),
+    frequency: 0
+  });
+  User.findOne({
+    username: req.user.username
+  }, function(err, foundUser){
+    foundUser.nouns.push(newWord);
+    foundUser.save();
+  });
+  res.redirect('/home')
+});
+
+app.post('/homeVerb', (req, res)=>{
+  const newWord = new Word({
+    word: req.body.verb,
+    timeStamp: Date.now(),
+    frequency: 0
+  });
+  User.findOne({
+    username: req.user.username
+  }, function(err, foundUser){
+    foundUser.verbs.push(newWord);
+    foundUser.save();
+  });
+  res.redirect('/home')
+});
+
+app.post('/homeAdjective', (req, res)=>{
+  const newWord = new Word({
+    word: req.body.adjective,
+    timeStamp: Date.now(),
+    frequency: 0
+  });
+  User.findOne({
+    username: req.user.username
+  }, function(err, foundUser){
+    foundUser.adjectives.push(newWord);
+    foundUser.save();
+  });
+  res.redirect('/home')
+});
+
+app.post('/homeOther', (req, res)=>{
+  const newWord = new Word({
+    word: req.body.other,
+    timeStamp: Date.now(),
+    frequency: 0
+  });
+  User.findOne({
+    username: req.user.username
+  }, function(err, foundUser){
+    foundUser.others.push(newWord);
+    foundUser.save();
+  });
+  res.redirect('/home')
 });
 
 

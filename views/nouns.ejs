@@ -4,4 +4,27 @@
 <p class="loggedInMsg">Logged in as <%= currentUser %> </p>
 <h1>Nouns</h1>
 
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Word</th>
+      <th scope="col">Added</th>
+      <th scope="col">Frequency</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% nounsList.forEach(function(item){ %>
+      <tr>
+        <th scope="row"></th>
+          <td><%= item.word %></td>
+          <td><%= item.timeStamp.toDateString() %></td>
+          <td><%= item.frequency %></td>
+        </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+
+
 <%- include('footer') -%>
