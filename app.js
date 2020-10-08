@@ -5,6 +5,9 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
+const ObjectId = require('mongodb').ObjectID;
+
+
 
 const Schema = mongoose.Schema;
 
@@ -28,13 +31,13 @@ mongoose.connect("mongodb://localhost:27017/germanDB", {
   useUnifiedTopology: true
 });
 mongoose.set('useCreateIndex', true);
-
-
+const db = mongoose.connection;
 
 const wordsSchema = new Schema({
   word: String,
   timeStamp: Date,
-  frequency: Number
+  frequency: Number,
+  status: Number
 });
 const Word = mongoose.model("Word", wordsSchema);
 
@@ -56,7 +59,8 @@ passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
 
-
+//////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 app.get('/', (req, res)=>{
   res.render('landing')
@@ -116,6 +120,8 @@ app.get('/logout', (req, res)=>{
   res.redirect('/')
 });
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 app.post('/register', (req, res)=>{
   User.register({username: req.body.username}, req.body.password, function(err, user){
@@ -142,11 +148,15 @@ app.post('/login', (req, res)=>{
   });
 });
 
+//////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+
 app.post('/homeNoun', (req, res)=>{
   const newWord = new Word({
     word: req.body.noun,
     timeStamp: Date.now(),
-    frequency: 0
+    frequency: 1,
+    status: 1
   });
   User.findOne({
     username: req.user.username
@@ -161,7 +171,8 @@ app.post('/homeVerb', (req, res)=>{
   const newWord = new Word({
     word: req.body.verb,
     timeStamp: Date.now(),
-    frequency: 0
+    frequency: 1,
+    status: 1
   });
   User.findOne({
     username: req.user.username
@@ -176,7 +187,8 @@ app.post('/homeAdjective', (req, res)=>{
   const newWord = new Word({
     word: req.body.adjective,
     timeStamp: Date.now(),
-    frequency: 0
+    frequency: 1,
+    status: 1
   });
   User.findOne({
     username: req.user.username
@@ -191,7 +203,8 @@ app.post('/homeOther', (req, res)=>{
   const newWord = new Word({
     word: req.body.other,
     timeStamp: Date.now(),
-    frequency: 0
+    frequency: 1,
+    status: 1
   });
   User.findOne({
     username: req.user.username
@@ -201,6 +214,153 @@ app.post('/homeOther', (req, res)=>{
   });
   res.redirect('/home')
 });
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+app.post ('/redNoun', function(req, res){
+db.collections.users.updateOne(
+  {},
+  {$set: {"nouns.$[element].status": 1}},
+  {multi: true,
+  arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+);
+  res.redirect('/nouns');
+});
+app.post('/yellowNoun', (req, res)=>{
+  db.collections.users.updateOne(
+    {},
+    {$set: {"nouns.$[element].status": 2}},
+    {multi: true,
+    arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+  );
+  res.redirect('/nouns');
+});
+app.post('/greenNoun', (req, res)=>{
+  db.collections.users.updateOne(
+    {},
+    {$set: {"nouns.$[element].status": 3}},
+    {multi: true,
+    arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+  );
+  res.redirect('/nouns');
+});
+
+
+
+app.post ('/redVerb', function(req, res){
+db.collections.users.updateOne(
+  {},
+  {$set: {"verbs.$[element].status": 1}},
+  {multi: true,
+  arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+);
+  res.redirect('/verbs');
+});
+app.post('/yellowVerb', (req, res)=>{
+  db.collections.users.updateOne(
+    {},
+    {$set: {"verbs.$[element].status": 2}},
+    {multi: true,
+    arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+  );
+  res.redirect('/verbs');
+});
+app.post('/greenVerb', (req, res)=>{
+  db.collections.users.updateOne(
+    {},
+    {$set: {"verbs.$[element].status": 3}},
+    {multi: true,
+    arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+  );
+  res.redirect('/verbs');
+});
+
+
+
+app.post ('/redAdjective', function(req, res){
+db.collections.users.updateOne(
+  {},
+  {$set: {"adjectives.$[element].status": 1}},
+  {multi: true,
+  arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+);
+  res.redirect('/adjectives');
+});
+app.post('/yellowAdjective', (req, res)=>{
+  db.collections.users.updateOne(
+    {},
+    {$set: {"adjectives.$[element].status": 2}},
+    {multi: true,
+    arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+  );
+  res.redirect('/adjectives');
+});
+app.post('/greenAdjective', (req, res)=>{
+  db.collections.users.updateOne(
+    {},
+    {$set: {"adjectives.$[element].status": 3}},
+    {multi: true,
+    arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+  );
+  res.redirect('/adjectives');
+});
+
+
+
+app.post ('/redOther', function(req, res){
+db.collections.users.updateOne(
+  {},
+  {$set: {"others.$[element].status": 1}},
+  {multi: true,
+  arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+);
+  res.redirect('/others');
+});
+app.post('/yellowOther', (req, res)=>{
+  db.collections.users.updateOne(
+    {},
+    {$set: {"others.$[element].status": 2}},
+    {multi: true,
+    arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+  );
+  res.redirect('/others');
+});
+app.post('/greenOther', (req, res)=>{
+  db.collections.users.updateOne(
+    {},
+    {$set: {"others.$[element].status": 3}},
+    {multi: true,
+    arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+  );
+  res.redirect('/others');
+});
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+app.post('/delete', function(req, res){
+  Word.findByIdAndRemove(req.body.inputId, function(err){
+    if(err){
+      console.log(err)
+    } else {
+      console.log("Item removed");
+    }
+  });
+  res.redirect('/home')
+})
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 app.listen(3000, ()=> console.log("Listening on Port 3000"));

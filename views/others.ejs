@@ -7,10 +7,13 @@
 <table class="table">
   <thead>
     <tr>
-      <th scope="col">#</th>
+      <th scope="col"></th>
       <th scope="col">Word</th>
       <th scope="col">Added</th>
       <th scope="col">Frequency</th>
+      <th scope="col">Status</th>
+      <th scope="col">Change Status</th>
+      <th scope="col">Delete</th>
     </tr>
   </thead>
   <tbody>
@@ -19,7 +22,28 @@
         <th scope="row"></th>
           <td><%= item.word %></td>
           <td><%= item.timeStamp.toDateString() %></td>
-          <td><%= item.frequency %></td>
+          <td><%= item.frequency %> <button class="btn btn-secondary btn-md">+</button></td>
+          <td><%= item.status %></td>
+          <td>
+            <form class="trafficLightForm" action="/redOther" method="post">
+              <input name="inputId" value=<%= item._id %> type="hidden"></input>
+              <button class="btn btn-danger" type="submit">+</button>
+            </form>
+            <form class="trafficLightForm" action="/yellowOther" method="post">
+              <input name="inputId" value=<%= item._id %> type="hidden"></input>
+              <button class="btn btn-warning" type="submit">+</button>
+            </form>
+            <form class="trafficLightForm" action="/greenOther" method="post">
+              <input name="inputId" value=<%= item._id %> type="hidden"></input>
+              <button class="btn btn-success" type="submit">+</button>
+            </form>
+          </td>
+          <td>
+            <form class="trafficLightForm" action="/delete" method="post">
+              <input name="inputId" value=<%= item._id %> type="hidden"></input>
+              <button class="btn btn-outline-danger deleteBtn" type="submit">X</button>
+            </form>
+          </td>
         </tr>
     <% }) %>
   </tbody>

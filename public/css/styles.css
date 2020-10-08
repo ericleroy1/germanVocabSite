@@ -53,14 +53,24 @@ h1 {
   width: 40%;
 }
 
-.form-control {
-  margin-bottom: 5px;
+.form-inline {
+  margin-bottom: 3rem;
 }
 
 .wordForm {
-
-  margin-bottom: 3rem;
+  width: 85%;
+  margin-right: 1rem;
 }
+
+.form-inline .form-control {
+  width: 90%;
+}
+
+.trafficLightForm {
+  display: inline-block;
+}
+
+
 
 footer {
   text-align: center;
