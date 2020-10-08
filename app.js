@@ -220,7 +220,7 @@ app.post('/homeOther', (req, res)=>{
 
 app.post ('/redNoun', function(req, res){
 db.collections.users.updateOne(
-  {},
+  {username: req.user.username},
   {$set: {"nouns.$[element].status": 1}},
   {multi: true,
   arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
@@ -229,7 +229,7 @@ db.collections.users.updateOne(
 });
 app.post('/yellowNoun', (req, res)=>{
   db.collections.users.updateOne(
-    {},
+    {username: req.user.username},
     {$set: {"nouns.$[element].status": 2}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
@@ -238,7 +238,7 @@ app.post('/yellowNoun', (req, res)=>{
 });
 app.post('/greenNoun', (req, res)=>{
   db.collections.users.updateOne(
-    {},
+    {username: req.user.username},
     {$set: {"nouns.$[element].status": 3}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
@@ -250,7 +250,7 @@ app.post('/greenNoun', (req, res)=>{
 
 app.post ('/redVerb', function(req, res){
 db.collections.users.updateOne(
-  {},
+  {username: req.user.username},
   {$set: {"verbs.$[element].status": 1}},
   {multi: true,
   arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
@@ -259,7 +259,7 @@ db.collections.users.updateOne(
 });
 app.post('/yellowVerb', (req, res)=>{
   db.collections.users.updateOne(
-    {},
+    {username: req.user.username},
     {$set: {"verbs.$[element].status": 2}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
@@ -268,7 +268,7 @@ app.post('/yellowVerb', (req, res)=>{
 });
 app.post('/greenVerb', (req, res)=>{
   db.collections.users.updateOne(
-    {},
+    {username: req.user.username},
     {$set: {"verbs.$[element].status": 3}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
@@ -280,7 +280,7 @@ app.post('/greenVerb', (req, res)=>{
 
 app.post ('/redAdjective', function(req, res){
 db.collections.users.updateOne(
-  {},
+  {username: req.user.username},
   {$set: {"adjectives.$[element].status": 1}},
   {multi: true,
   arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
@@ -289,7 +289,7 @@ db.collections.users.updateOne(
 });
 app.post('/yellowAdjective', (req, res)=>{
   db.collections.users.updateOne(
-    {},
+    {username: req.user.username},
     {$set: {"adjectives.$[element].status": 2}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
@@ -298,7 +298,7 @@ app.post('/yellowAdjective', (req, res)=>{
 });
 app.post('/greenAdjective', (req, res)=>{
   db.collections.users.updateOne(
-    {},
+    {username: req.user.username},
     {$set: {"adjectives.$[element].status": 3}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
@@ -310,7 +310,7 @@ app.post('/greenAdjective', (req, res)=>{
 
 app.post ('/redOther', function(req, res){
 db.collections.users.updateOne(
-  {},
+  {username: req.user.username},
   {$set: {"others.$[element].status": 1}},
   {multi: true,
   arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
@@ -319,7 +319,7 @@ db.collections.users.updateOne(
 });
 app.post('/yellowOther', (req, res)=>{
   db.collections.users.updateOne(
-    {},
+    {username: req.user.username},
     {$set: {"others.$[element].status": 2}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
@@ -328,7 +328,7 @@ app.post('/yellowOther', (req, res)=>{
 });
 app.post('/greenOther', (req, res)=>{
   db.collections.users.updateOne(
-    {},
+    {username: req.user.username},
     {$set: {"others.$[element].status": 3}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
@@ -339,18 +339,45 @@ app.post('/greenOther', (req, res)=>{
 //////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
 
-app.post('/delete', function(req, res){
-  Word.findByIdAndRemove(req.body.inputId, function(err){
-    if(err){
-      console.log(err)
-    } else {
-      console.log("Item removed");
-    }
-  });
-  res.redirect('/home')
-})
 
+app.post('/deleteNoun', function(req, res){
+  db.collections.users.updateOne(
+    {username: req.user.username},
+    {$pull: {nouns: { _id: ObjectId(req.body.inputId)}}},
+    {multi: true}
+  );
+  console.log(req.body.inputId);
+  res.redirect('/nouns')
+});
+app.post('/deleteVerb', function(req, res){
+  db.collections.users.updateOne(
+    {username: req.user.username},
+    {$pull: {verbs: { _id: ObjectId(req.body.inputId)}}},
+    {multi: true}
+  );
+  console.log(req.body.inputId);
+  res.redirect('/verbs')
+});
+app.post('/deleteAdjective', function(req, res){
+  db.collections.users.updateOne(
+    {username: req.user.username},
+    {$pull: {adjectives: { _id: ObjectId(req.body.inputId)}}},
+    {multi: true}
+  );
+  console.log(req.body.inputId);
+  res.redirect('/adjectives')
+});
+app.post('/deleteOther', function(req, res){
+  db.collections.users.updateOne(
+    {username: req.user.username},
+    {$pull: {others: { _id: ObjectId(req.body.inputId)}}},
+    {multi: true}
+  );
+  console.log(req.body.inputId);
+  res.redirect('/others')
+});
 
+// $elemMatch: {_id: ObjectId(req.body.inputId)}
 
 
 
