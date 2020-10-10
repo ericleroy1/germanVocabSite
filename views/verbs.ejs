@@ -4,11 +4,29 @@
 <p class="loggedInMsg">Logged in as <%= currentUser %> </p>
 <h1>Verbs</h1>
 
-<table class="table">
+<div class="filtersDiv">
+    <h3>Filters</h3>
+
+    <p>Filter difficulty</p>
+    <label for="hardWords">Hard</label>
+    <input type="checkbox" class="checkbox" id="hardWords" value="hard" onclick="filterFunction()"/>
+    <label for="mediumWords">Medium </label>
+    <input type="checkbox" class="checkbox" id="mediumWords" value="medium" onclick="filterFunction()"/>
+    <label for="easyWords">Easy</label>
+    <input type="checkbox" class="checkbox" id="easyWords" value="easy" onclick="filterFunction()"/>
+
+
+  <div class="">
+    <button class="btn btn-sm btn-success" type="button" name="button">Clear Filters</button>
+  </div>
+</div>
+
+<table id="myTable" class="table">
   <thead>
-    <tr>
+    <tr class="header">
       <th scope="col"></th>
       <th scope="col">Word</th>
+      <th scope="col">Clue</th>
       <th scope="col">Added</th>
       <th scope="col">Frequency</th>
       <th scope="col">Status</th>
@@ -21,9 +39,44 @@
       <tr>
         <th scope="row"></th>
           <td><%= item.word %></td>
+          <td>
+            <!-- Button trigger modal -->
+            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal">
+              Clue
+            </button>
+
+            <!-- Modal -->
+            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Clue</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    ...
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
           <td><%= item.timeStamp.toDateString() %></td>
-          <td><%= item.frequency %> <button class="btn btn-secondary btn-md">+</button></td>
-          <td><%= item.status %></td>
+          <td>
+            <form action="verbPlus" method="post">
+              <%= item.frequency %>
+              <input name="inputId" value=<%= item._id %> type="hidden"></input>
+              <button class="btn btn-secondary btn-md" type="submit">+</button>
+              </form>
+          </td>
+          <td>
+            <div class="<%= item.status %> circle"><%= item.status%></div>
+          </td>
           <td>
             <form class="trafficLightForm" action="/redVerb" method="post">
               <input name="inputId" value=<%= item._id %> type="hidden"></input>

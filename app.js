@@ -31,13 +31,15 @@ mongoose.connect("mongodb://localhost:27017/germanDB", {
   useUnifiedTopology: true
 });
 mongoose.set('useCreateIndex', true);
+mongoose.set('useFindAndModify', false);
 const db = mongoose.connection;
 
 const wordsSchema = new Schema({
   word: String,
   timeStamp: Date,
   frequency: Number,
-  status: Number
+  status: String,
+  clue: String
 });
 const Word = mongoose.model("Word", wordsSchema);
 
@@ -152,76 +154,226 @@ app.post('/login', (req, res)=>{
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 app.post('/homeNoun', (req, res)=>{
-  const newWord = new Word({
-    word: req.body.noun,
-    timeStamp: Date.now(),
-    frequency: 1,
-    status: 1
+  User.exists({'nouns.word': req.body.noun}, function(err, result){
+    if (err){console.log(err)}
+    else {
+      if (result == true){
+        db.collections.users.updateOne(
+          {username: req.user.username},
+          {$inc: {"nouns.$[element].frequency": 1}},
+          {multi: true,
+          arrayFilters: [{"element.word": req.body.noun}]}
+        );
+        res.redirect('/home')
+      } else if (result == false){
+          const newWord = new Word({
+            word: req.body.noun,
+            timeStamp: Date.now(),
+            frequency: 1,
+            status: 1,
+            clue: ""
+          });
+          User.findOne({
+            username: req.user.username
+          }, function(err, foundUser){
+            foundUser.nouns.push(newWord);
+            foundUser.save();
+          });
+          res.redirect('/home')
+      }
+    }
   });
-  User.findOne({
-    username: req.user.username
-  }, function(err, foundUser){
-    foundUser.nouns.push(newWord);
-    foundUser.save();
-  });
-  res.redirect('/home')
 });
 
 app.post('/homeVerb', (req, res)=>{
-  const newWord = new Word({
-    word: req.body.verb,
-    timeStamp: Date.now(),
-    frequency: 1,
-    status: 1
+  User.exists({'verbs.word': req.body.verb}, function(err, result){
+    if (err){console.log(err)}
+    else {
+      if (result == true){
+        db.collections.users.updateOne(
+          {username: req.user.username},
+          {$inc: {"verbs.$[element].frequency": 1}},
+          {multi: true,
+          arrayFilters: [{"element.word": req.body.verb}]}
+        );
+        res.redirect('/home')
+      } else if (result == false){
+          const newWord = new Word({
+            word: req.body.verb,
+            timeStamp: Date.now(),
+            frequency: 1,
+            status: 1,
+            clue: ""
+          });
+          User.findOne({
+            username: req.user.username
+          }, function(err, foundUser){
+            foundUser.verbs.push(newWord);
+            foundUser.save();
+          });
+          res.redirect('/home')
+      }
+    }
   });
-  User.findOne({
-    username: req.user.username
-  }, function(err, foundUser){
-    foundUser.verbs.push(newWord);
-    foundUser.save();
-  });
-  res.redirect('/home')
 });
 
 app.post('/homeAdjective', (req, res)=>{
-  const newWord = new Word({
-    word: req.body.adjective,
-    timeStamp: Date.now(),
-    frequency: 1,
-    status: 1
+  User.exists({'adjectives.word': req.body.adjective}, function(err, result){
+    if (err){console.log(err)}
+    else {
+      if (result == true){
+        db.collections.users.updateOne(
+          {username: req.user.username},
+          {$inc: {"adjectives.$[element].frequency": 1}},
+          {multi: true,
+          arrayFilters: [{"element.word": req.body.adjective}]}
+        );
+        res.redirect('/home')
+      } else if (result == false){
+          const newWord = new Word({
+            word: req.body.adjective,
+            timeStamp: Date.now(),
+            frequency: 1,
+            status: 1,
+            clue: ""
+          });
+          User.findOne({
+            username: req.user.username
+          }, function(err, foundUser){
+            foundUser.adjectives.push(newWord);
+            foundUser.save();
+          });
+          res.redirect('/home')
+      }
+    }
   });
-  User.findOne({
-    username: req.user.username
-  }, function(err, foundUser){
-    foundUser.adjectives.push(newWord);
-    foundUser.save();
-  });
-  res.redirect('/home')
 });
 
 app.post('/homeOther', (req, res)=>{
-  const newWord = new Word({
-    word: req.body.other,
-    timeStamp: Date.now(),
-    frequency: 1,
-    status: 1
+  User.exists({'others.word': req.body.other}, function(err, result){
+    if (err){console.log(err)}
+    else {
+      if (result == true){
+        db.collections.users.updateOne(
+          {username: req.user.username},
+          {$inc: {"others.$[element].frequency": 1}},
+          {multi: true,
+          arrayFilters: [{"element.word": req.body.other}]}
+        );
+        res.redirect('/home')
+      } else if (result == false){
+          const newWord = new Word({
+            word: req.body.other,
+            timeStamp: Date.now(),
+            frequency: 1,
+            status: 1,
+            clue: ""
+          });
+          User.findOne({
+            username: req.user.username
+          }, function(err, foundUser){
+            foundUser.others.push(newWord);
+            foundUser.save();
+          });
+          res.redirect('/home')
+      }
+    }
   });
-  User.findOne({
-    username: req.user.username
-  }, function(err, foundUser){
-    foundUser.others.push(newWord);
-    foundUser.save();
-  });
-  res.redirect('/home')
 });
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
+
+app.post('/nounClue', function(req, res){
+  db.collections.users.updateOne(
+    {username: req.user.username},
+    {$set: {"nouns.$[element].clue": req.body.clue}},
+    {multi: true,
+    arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+  );
+  console.log(req.body.clue)
+  console.log(req.body.inputId)
+  res.redirect('/nouns')
+})
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+// app.post('/filterNoun', function(req, res){
+//
+// });
+
+app.post('/filterNoun', function(req, res){
+  let filtered = db.collections.users.find(
+    {username: req.user.username},
+    {'nouns.status': "red"},
+    // {arrayFilters:[{"nouns.$[element].status": "red"}]},
+    // {multi: true, arrayFilters: [{"element.status": "red"}]}
+  );
+  console.log(filtered);
+  res.redirect('/nouns')
+})
+
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+app.post ('/nounPlus', function(req, res){
+db.collections.users.updateOne(
+  {username: req.user.username},
+  {$inc: {"nouns.$[element].frequency": 1}},
+  {multi: true,
+  arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+);
+  res.redirect('/nouns');
+});
+app.post ('/verbPlus', function(req, res){
+db.collections.users.updateOne(
+  {username: req.user.username},
+  {$inc: {"verbs.$[element].frequency": 1}},
+  {multi: true,
+  arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+);
+  res.redirect('/verbs');
+});
+app.post ('/adjectivePlus', function(req, res){
+db.collections.users.updateOne(
+  {username: req.user.username},
+  {$inc: {"adjectives.$[element].frequency": 1}},
+  {multi: true,
+  arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+);
+  res.redirect('/adjectives');
+});
+app.post ('/otherPlus', function(req, res){
+db.collections.users.updateOne(
+  {username: req.user.username},
+  {$inc: {"others.$[element].frequency": 1}},
+  {multi: true,
+  arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
+);
+  res.redirect('/others');
+});
+
+
 
 app.post ('/redNoun', function(req, res){
 db.collections.users.updateOne(
   {username: req.user.username},
-  {$set: {"nouns.$[element].status": 1}},
+  {$set: {"nouns.$[element].status": "hard"}},
   {multi: true,
   arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
 );
@@ -230,7 +382,7 @@ db.collections.users.updateOne(
 app.post('/yellowNoun', (req, res)=>{
   db.collections.users.updateOne(
     {username: req.user.username},
-    {$set: {"nouns.$[element].status": 2}},
+    {$set: {"nouns.$[element].status": "medium"}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
   );
@@ -239,7 +391,7 @@ app.post('/yellowNoun', (req, res)=>{
 app.post('/greenNoun', (req, res)=>{
   db.collections.users.updateOne(
     {username: req.user.username},
-    {$set: {"nouns.$[element].status": 3}},
+    {$set: {"nouns.$[element].status": "easy"}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
   );
@@ -251,7 +403,7 @@ app.post('/greenNoun', (req, res)=>{
 app.post ('/redVerb', function(req, res){
 db.collections.users.updateOne(
   {username: req.user.username},
-  {$set: {"verbs.$[element].status": 1}},
+  {$set: {"verbs.$[element].status": "hard"}},
   {multi: true,
   arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
 );
@@ -260,7 +412,7 @@ db.collections.users.updateOne(
 app.post('/yellowVerb', (req, res)=>{
   db.collections.users.updateOne(
     {username: req.user.username},
-    {$set: {"verbs.$[element].status": 2}},
+    {$set: {"verbs.$[element].status": "medium"}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
   );
@@ -269,7 +421,7 @@ app.post('/yellowVerb', (req, res)=>{
 app.post('/greenVerb', (req, res)=>{
   db.collections.users.updateOne(
     {username: req.user.username},
-    {$set: {"verbs.$[element].status": 3}},
+    {$set: {"verbs.$[element].status": "easy"}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
   );
@@ -281,7 +433,7 @@ app.post('/greenVerb', (req, res)=>{
 app.post ('/redAdjective', function(req, res){
 db.collections.users.updateOne(
   {username: req.user.username},
-  {$set: {"adjectives.$[element].status": 1}},
+  {$set: {"adjectives.$[element].status": "hard"}},
   {multi: true,
   arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
 );
@@ -290,7 +442,7 @@ db.collections.users.updateOne(
 app.post('/yellowAdjective', (req, res)=>{
   db.collections.users.updateOne(
     {username: req.user.username},
-    {$set: {"adjectives.$[element].status": 2}},
+    {$set: {"adjectives.$[element].status": "medium"}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
   );
@@ -299,7 +451,7 @@ app.post('/yellowAdjective', (req, res)=>{
 app.post('/greenAdjective', (req, res)=>{
   db.collections.users.updateOne(
     {username: req.user.username},
-    {$set: {"adjectives.$[element].status": 3}},
+    {$set: {"adjectives.$[element].status": "easy"}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
   );
@@ -311,7 +463,7 @@ app.post('/greenAdjective', (req, res)=>{
 app.post ('/redOther', function(req, res){
 db.collections.users.updateOne(
   {username: req.user.username},
-  {$set: {"others.$[element].status": 1}},
+  {$set: {"others.$[element].status": "hard"}},
   {multi: true,
   arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
 );
@@ -320,7 +472,7 @@ db.collections.users.updateOne(
 app.post('/yellowOther', (req, res)=>{
   db.collections.users.updateOne(
     {username: req.user.username},
-    {$set: {"others.$[element].status": 2}},
+    {$set: {"others.$[element].status": "medium"}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
   );
@@ -329,7 +481,7 @@ app.post('/yellowOther', (req, res)=>{
 app.post('/greenOther', (req, res)=>{
   db.collections.users.updateOne(
     {username: req.user.username},
-    {$set: {"others.$[element].status": 3}},
+    {$set: {"others.$[element].status": "easy"}},
     {multi: true,
     arrayFilters: [{"element._id": ObjectId(req.body.inputId)}]}
   );
