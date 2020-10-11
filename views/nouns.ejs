@@ -1,12 +1,20 @@
 <%- include('header') -%>
 <%- include('navbar') -%>
 
-<p class="loggedInMsg">Logged in as <%= currentUser %> </p>
-<h1>Nouns</h1>
-  <div class="filtersDiv">
-      <h3>Filters</h3>
 
-      <p>Filter difficulty</p>
+<nav class="navbar">
+  <form class="btn-group btn-group-sm navForm" role="group">
+    <a href="/nouns" class="navbtn btn btn-secondary" type="button">Nouns</a>
+    <a href="/verbs" class="navbtn btn btn-secondary" type="button">Verbs</a>
+    <a href="/adjectives" class="navbtn btn btn-secondary" type="button">Adj/Adv</a>
+    <a href="/others" class="navbtn btn btn-secondary" type="button">Others</a>
+  </form>
+</nav>
+
+
+<div class="mainDiv">
+  <div class="filtersDiv">
+      <p class="filterP">Filter difficulty</p>
       <label for="hardWords">Hard</label>
       <input type="checkbox" class="checkbox" id="hardWords" value="hard" onclick="filterFunction()"/>
       <label for="mediumWords">Medium </label>
@@ -105,6 +113,7 @@
     <% }) %>
   </tbody>
 </table>
+</div>
 
 
 

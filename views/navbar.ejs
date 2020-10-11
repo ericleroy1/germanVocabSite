@@ -1,11 +1,10 @@
 
 <nav class="navbar">
-  <form class="navForm">
-    <a href="/home" class="navbtn btn btn-outline-primary" type="button">Home</a>
-    <a href="/nouns" class="navbtn btn btn-outline-primary" type="button">Nouns</a>
-    <a href="/verbs" class="navbtn btn btn-outline-primary" type="button">Verbs</a>
-    <a href="/adjectives" class="navbtn btn btn-outline-primary" type="button">Adjectives</a>
-    <a href="/others" class="navbtn btn btn-outline-primary" type="button">Others</a>
-    <a href="/logout" class="signoutbtn navbtn btn btn-outline-primary" type="button">Sign Out</a>
+  <form class="navTop">
+    <img id="logo2" src="wordBarnLogo2.png" alt="Word-Barn-Logo">
+    <a href="/home" class="navbtn btn btn-outline-secondary" type="button">Home</a>
+    <a href="/mywords" class="navbtn btn btn-outline-secondary" type="button">My Words</a>
+    <p class="loggedInMsg"> <%= currentUser %> </p>
+    <a href="/logout" class="signoutbtn navbtn btn btn-outline-secondary" type="button">Sign Out</a>
   </form>
 </nav>

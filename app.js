@@ -81,6 +81,14 @@ app.get('/home', (req, res)=>{
     res.redirect('/login')
   }
 });
+app.get('/mywords', (req, res)=>{
+  if (req.isAuthenticated()){
+    let currentUser = req.user.username;
+    res.render('mywords', {currentUser: currentUser});
+  } else {
+    res.redirect('/login')
+  }
+});
 app.get('/nouns', (req, res)=>{
   if (req.isAuthenticated()){
     let currentUser = req.user.username;
