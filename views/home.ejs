@@ -3,43 +3,49 @@
 <%- include('navbar') -%>
 
 
-<div class="container">
+<div class="mainDiv">
 
-  <div class="infoText">
-    <p>
-      Add a new word according to its word family. Don't worry if you
-      have previously added it in the past. Adding it again will add a +1
-      to the frequency score.
-      </p>
+
+  <div class="homeDiv">
+    <div class="infoText">
+      <p>
+        Add a new word according to its word family. Don't worry if you
+        have previously added it in the past. Adding it again will add a +1
+        to the frequency score.
+        </p>
+    </div>
+
+    <div class="inputs">
+      <form class="form-inline" action="/homeNoun" method="post" autocomplete="off">
+        <div class="wordForm form-group mb-2">
+        <input class="form-control" type="text" name="noun" value="" placeholder="add a noun...">
+        </div>
+        <button class="btn btn-md btn-secondary mb-2" type="submit" name="button">Submit</button>
+      </form>
+
+      <form class="form-inline" action="/homeVerb" method="post" autocomplete="off">
+        <div class="wordForm form-group mb-2">
+        <input class="form-control" type="text" name="verb" value="" placeholder="add a verb...">
+        </div>
+        <button class="btn btn-md btn-secondary mb-2" type="submit" name="button">Submit</button>
+      </form>
+
+      <form class="form-inline" action="/homeAdjective" method="post" autocomplete="off">
+        <div class="wordForm form-group mb-2">
+        <input class="form-control" type="text" name="adjective" value="" placeholder="add an adjective/adverb...">
+        </div>
+        <button class="btn btn-md btn-secondary mb-2" type="submit" name="button">Submit</button>
+      </form>
+
+      <form class="form-inline" action="/homeOther" method="post" autocomplete="off">
+        <div class="wordForm form-group mb-2">
+        <input class="form-control" type="text" name="other" value="" placeholder="add another word...">
+        </div>
+        <button class="btn btn-md btn-secondary mb-2" type="submit" name="button">Submit</button>
+      </form>
+    </div>
   </div>
 
-    <form class="form-inline" action="/homeNoun" method="post" autocomplete="off">
-      <div class="wordForm form-group mb-2">
-      <input class="form-control" type="text" name="noun" value="" placeholder="add a noun...">
-      </div>
-      <button class="btn btn-md btn-primary mb-2" type="submit" name="button">Submit</button>
-    </form>
-
-    <form class="form-inline" action="/homeVerb" method="post" autocomplete="off">
-      <div class="wordForm form-group mb-2">
-      <input class="form-control" type="text" name="verb" value="" placeholder="add a verb...">
-      </div>
-      <button class="btn btn-md btn-primary mb-2" type="submit" name="button">Submit</button>
-    </form>
-
-    <form class="form-inline" action="/homeAdjective" method="post" autocomplete="off">
-      <div class="wordForm form-group mb-2">
-      <input class="form-control" type="text" name="adjective" value="" placeholder="add an adjective/adverb...">
-      </div>
-      <button class="btn btn-md btn-primary mb-2" type="submit" name="button">Submit</button>
-    </form>
-
-    <form class="form-inline" action="/homeOther" method="post" autocomplete="off">
-      <div class="wordForm form-group mb-2">
-      <input class="form-control" type="text" name="other" value="" placeholder="add another word...">
-      </div>
-      <button class="btn btn-md btn-primary mb-2" type="submit" name="button">Submit</button>
-    </form>
 
 
 </div>

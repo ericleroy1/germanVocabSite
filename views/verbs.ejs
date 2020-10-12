@@ -2,38 +2,40 @@
 <%- include('navbar') -%>
 
 
-<nav class="navbar">
-  <form class="btn-group btn-group-sm navForm" role="group">
-    <a href="/nouns" class="navbtn btn btn-secondary" type="button">Nouns</a>
-    <a href="/verbs" class="navbtn btn btn-secondary" type="button">Verbs</a>
-    <a href="/adjectives" class="navbtn btn btn-secondary" type="button">Adj/Adv</a>
-    <a href="/others" class="navbtn btn btn-secondary" type="button">Others</a>
-  </form>
-</nav>
-
 <div class="mainDiv">
-<div class="filtersDiv">
 
-    <p class="filterP">Filter difficulty</p>
-    <label for="hardWords">Hard</label>
-    <input type="checkbox" class="checkbox" id="hardWords" value="hard" onclick="filterFunction()"/>
-    <label for="mediumWords">Medium </label>
-    <input type="checkbox" class="checkbox" id="mediumWords" value="medium" onclick="filterFunction()"/>
-    <label for="easyWords">Easy</label>
-    <input type="checkbox" class="checkbox" id="easyWords" value="easy" onclick="filterFunction()"/>
+  <div class="filtersDiv">
 
+    <div class="block1">
+      <p class="filterP">Filter difficulty</p>
+      <label for="hardWords">Hard</label>
+      <input type="checkbox" class="checkbox" id="hardWords" value="hard" onclick="filterFunction()"/>
+      <label for="mediumWords">Medium </label>
+      <input type="checkbox" class="checkbox" id="mediumWords" value="medium" onclick="filterFunction()"/>
+      <label for="easyWords">Easy</label>
+      <input type="checkbox" class="checkbox" id="easyWords" value="easy" onclick="filterFunction()"/>
+    </div>
 
-  <div class="">
-    <button class="btn btn-sm btn-success" type="button" name="button">Clear Filters</button>
+    <div class="block2">
+      <button class="btn btn-sm btn-success" type="button" name="button">Clear Filters</button>
+    </div>
+
+    <div class="block3">
+        <form class="btn-group btn-group-sm navForm" role="group">
+          <a href="/nouns" class="navbtn btn btn-secondary" type="button">Nouns</a>
+          <a href="/verbs" class="navbtn btn btn-secondary" type="button">Verbs</a>
+          <a href="/adjectives" class="navbtn btn btn-secondary" type="button">Adj/Adv</a>
+          <a href="/others" class="navbtn btn btn-secondary" type="button">Others</a>
+        </form>
+    </div>
+
   </div>
-</div>
 
 <table id="myTable" class="table">
   <thead>
     <tr class="header">
       <th scope="col"></th>
       <th scope="col">Word</th>
-      <th scope="col">Clue</th>
       <th scope="col">Added</th>
       <th scope="col">Frequency</th>
       <th scope="col">Status</th>
@@ -46,62 +48,31 @@
       <tr>
         <th scope="row"></th>
           <td><%= item.word %></td>
-          <td>
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-sm btn-primary" data-toggle="modal" data-target="#exampleModal">
-              Clue
-            </button>
-
-            <!-- Modal -->
-            <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Clue</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    ...
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </td>
           <td><%= item.timeStamp.toDateString() %></td>
           <td>
-            <form action="verbPlus" method="post">
               <%= item.frequency %>
-              <input name="inputId" value=<%= item._id %> type="hidden"></input>
-              <button class="btn btn-secondary btn-md" type="submit">+</button>
-              </form>
           </td>
           <td>
-            <div class="<%= item.status %> circle"><%= item.status%></div>
+            <%= item.status %>
           </td>
           <td>
             <form class="trafficLightForm" action="/redVerb" method="post">
               <input name="inputId" value=<%= item._id %> type="hidden"></input>
-              <button class="btn btn-danger" type="submit">+</button>
+              <button class="btn statusBtn btn-danger" type="submit">+</button>
             </form>
             <form class="trafficLightForm" action="/yellowVerb" method="post">
               <input name="inputId" value=<%= item._id %> type="hidden"></input>
-              <button class="btn btn-warning" type="submit">+</button>
+              <button class="btn statusBtn btn-warning" type="submit">+</button>
             </form>
             <form class="trafficLightForm" action="/greenVerb" method="post">
               <input name="inputId" value=<%= item._id %> type="hidden"></input>
-              <button class="btn btn-success" type="submit">+</button>
+              <button class="btn statusBtn btn-success" type="submit">+</button>
             </form>
           </td>
           <td>
             <form class="trafficLightForm" action="/deleteVerb" method="post">
               <input name="inputId" value=<%= item._id %> type="hidden"></input>
-              <button class="btn btn-outline-danger deleteBtn" type="submit">X</button>
+              <button class="btn statusBtn btn-outline-danger deleteBtn" type="submit">X</button>
             </form>
           </td>
         </tr>

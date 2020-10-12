@@ -1,10 +1,68 @@
 
-<nav class="navbar">
-  <form class="navTop">
-    <img id="logo2" src="wordBarnLogo2.png" alt="Word-Barn-Logo">
-    <a href="/home" class="navbtn btn btn-outline-secondary" type="button">Home</a>
-    <a href="/mywords" class="navbtn btn btn-outline-secondary" type="button">My Words</a>
-    <p class="loggedInMsg"> <%= currentUser %> </p>
-    <a href="/logout" class="signoutbtn navbtn btn btn-outline-secondary" type="button">Sign Out</a>
-  </form>
+<nav>
+  <a class="navbar-brand" href="/home">
+    <img id="logo2" src="wordBarnLogo.png" alt="Word-Barn-Logo">
+  </a>
+  <ul class="nav justify-content-end">
+
+    <li class="nav-item">
+      <a class="nav-link" href="/home">Home</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="/mywords">My Words</a>
+    </li>
+    <li class="userName nav-item nav-link"><%= currentUser %></li>
+    <li class="nav-item">
+      <a class="nav-link btn btn-sm btn-outline-secondary" href="/logout">Sign Out</a>
+    </li>
+  </ul>
 </nav>
+
+<div class="chartsDiv">
+  <div class="chart1">
+    <h4>You're learning <span id="message"></span></h4>
+  </div>
+  <div class="chart2">
+    <canvas id="myChart2"></canvas>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+  let total = <%=nounsLength%> + <%=verbsLength%> + <%=adjectivesLength%> + <%=othersLength %>;
+  if (total == 1){
+    document.getElementById("message").innerHTML = total + " word";
+  } else{
+    document.getElementById("message").innerHTML = total + " words";
+  }
+
+
+  var ctx = document.getElementById('myChart2').getContext('2d');
+  var chart = new Chart(ctx, {
+      // The type of chart we want to create
+      type: 'horizontalBar',
+
+      // The data for our dataset
+      data: {
+          labels: ['Nouns', 'Verbs', 'Adjectives/Adverbs', 'Others'],
+          datasets: [{
+              label: 'My Word Bank',
+              backgroundColor: 'rgb(255, 99, 132)',
+              borderColor: 'rgb(255, 99, 132)',
+              data: [<%=nounsLength%>, <%=verbsLength%>, <%=adjectivesLength%>, <%=othersLength %>]
+          }]
+      },
+
+      // Configuration options go here
+      options: {
+        scales: {
+        xAxes: [{
+            ticks: {
+                beginAtZero: true,
+                stepSize: 1
+            }
+        }]
+    }
+      }
+  });
+</script>

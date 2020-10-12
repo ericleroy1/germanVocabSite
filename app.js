@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const passport = require('passport');
 const passportLocalMongoose = require('passport-local-mongoose');
+const Chart = require('chart.js');
 const ObjectId = require('mongodb').ObjectID;
 
 
@@ -76,7 +77,17 @@ app.get('/login', (req, res)=>{
 app.get('/home', (req, res)=>{
   if (req.isAuthenticated()){
     let currentUser = req.user.username;
-    res.render('home', {currentUser: currentUser});
+    let nounsLength = (req.user.nouns).length;
+    let verbsLength = (req.user.verbs).length;
+    let adjectivesLength = (req.user.adjectives).length;
+    let othersLength = (req.user.others).length;
+    res.render('home', {
+      currentUser: currentUser,
+      nounsLength: nounsLength,
+      verbsLength: verbsLength,
+      adjectivesLength: adjectivesLength,
+      othersLength: othersLength
+    });
   } else {
     res.redirect('/login')
   }
@@ -84,7 +95,17 @@ app.get('/home', (req, res)=>{
 app.get('/mywords', (req, res)=>{
   if (req.isAuthenticated()){
     let currentUser = req.user.username;
-    res.render('mywords', {currentUser: currentUser});
+    let nounsLength = (req.user.nouns).length;
+    let verbsLength = (req.user.verbs).length;
+    let adjectivesLength = (req.user.adjectives).length;
+    let othersLength = (req.user.others).length;
+    res.render('myWords', {
+      currentUser: currentUser,
+      nounsLength: nounsLength,
+      verbsLength: verbsLength,
+      adjectivesLength: adjectivesLength,
+      othersLength: othersLength
+    });
   } else {
     res.redirect('/login')
   }
@@ -93,7 +114,18 @@ app.get('/nouns', (req, res)=>{
   if (req.isAuthenticated()){
     let currentUser = req.user.username;
     let nouns = req.user.nouns;
-    res.render('nouns', {currentUser: currentUser, nounsList: nouns});
+    let nounsLength = (req.user.nouns).length;
+    let verbsLength = (req.user.verbs).length;
+    let adjectivesLength = (req.user.adjectives).length;
+    let othersLength = (req.user.others).length;
+    res.render('nouns', {
+      currentUser: currentUser,
+      nounsList: nouns,
+      nounsLength: nounsLength,
+      verbsLength: verbsLength,
+      adjectivesLength: adjectivesLength,
+      othersLength: othersLength
+    });
   } else {
     res.redirect('/login')
   }
@@ -102,7 +134,18 @@ app.get('/verbs', (req, res)=>{
   if (req.isAuthenticated()){
     let currentUser = req.user.username;
     let verbs = req.user.verbs;
-    res.render('verbs', {currentUser: currentUser, verbsList: verbs});
+    let nounsLength = (req.user.nouns).length;
+    let verbsLength = (req.user.verbs).length;
+    let adjectivesLength = (req.user.adjectives).length;
+    let othersLength = (req.user.others).length;
+    res.render('verbs', {
+      currentUser: currentUser,
+      verbsList: verbs,
+      nounsLength: nounsLength,
+      verbsLength: verbsLength,
+      adjectivesLength: adjectivesLength,
+      othersLength: othersLength
+    });
   } else {
     res.redirect('/login')
   }
@@ -111,7 +154,18 @@ app.get('/adjectives', (req, res)=>{
   if (req.isAuthenticated()){
     let currentUser = req.user.username;
     let adjectives = req.user.adjectives;
-    res.render('adjectives', {currentUser: currentUser, adjectivesList: adjectives});
+    let nounsLength = (req.user.nouns).length;
+    let verbsLength = (req.user.verbs).length;
+    let adjectivesLength = (req.user.adjectives).length;
+    let othersLength = (req.user.others).length;
+    res.render('adjectives', {
+      currentUser: currentUser,
+      adjectivesList: adjectives,
+      nounsLength: nounsLength,
+      verbsLength: verbsLength,
+      adjectivesLength: adjectivesLength,
+      othersLength: othersLength
+    });
   } else {
     res.redirect('/login')
   }
@@ -120,7 +174,18 @@ app.get('/others', (req, res)=>{
   if (req.isAuthenticated()){
     let currentUser = req.user.username;
     let others = req.user.others;
-    res.render('others', {currentUser: currentUser, othersList: others});
+    let nounsLength = (req.user.nouns).length;
+    let verbsLength = (req.user.verbs).length;
+    let adjectivesLength = (req.user.adjectives).length;
+    let othersLength = (req.user.others).length;
+    res.render('others', {
+      currentUser: currentUser,
+      othersList: others,
+      nounsLength: nounsLength,
+      verbsLength: verbsLength,
+      adjectivesLength: adjectivesLength,
+      othersLength: othersLength
+    });
   } else {
     res.redirect('/login')
   }
@@ -129,6 +194,8 @@ app.get('/logout', (req, res)=>{
   req.logout();
   res.redirect('/')
 });
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////////////
@@ -178,7 +245,7 @@ app.post('/homeNoun', (req, res)=>{
             word: req.body.noun,
             timeStamp: Date.now(),
             frequency: 1,
-            status: 1,
+            status: "hard",
             clue: ""
           });
           User.findOne({
@@ -210,7 +277,7 @@ app.post('/homeVerb', (req, res)=>{
             word: req.body.verb,
             timeStamp: Date.now(),
             frequency: 1,
-            status: 1,
+            status: "hard",
             clue: ""
           });
           User.findOne({
@@ -242,7 +309,7 @@ app.post('/homeAdjective', (req, res)=>{
             word: req.body.adjective,
             timeStamp: Date.now(),
             frequency: 1,
-            status: 1,
+            status: "hard",
             clue: ""
           });
           User.findOne({
@@ -274,7 +341,7 @@ app.post('/homeOther', (req, res)=>{
             word: req.body.other,
             timeStamp: Date.now(),
             frequency: 1,
-            status: 1,
+            status: "hard",
             clue: ""
           });
           User.findOne({
