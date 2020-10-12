@@ -1,23 +1,18 @@
 <%- include('header') -%>
 <%- include('navbar') -%>
 
-
 <div class="mainDiv">
 
   <div class="filtersDiv">
-
     <div class="block1">
       <p class="filterP">Filter difficulty</p>
-      <label for="hardWords">Hard</label>
-      <input type="checkbox" class="checkbox" id="hardWords" value="hard" onclick="filterFunction()"/>
-      <label for="mediumWords">Medium </label>
-      <input type="checkbox" class="checkbox" id="mediumWords" value="medium" onclick="filterFunction()"/>
-      <label for="easyWords">Easy</label>
-      <input type="checkbox" class="checkbox" id="easyWords" value="easy" onclick="filterFunction()"/>
+      <button class="btn btn-sm btn-secondary" type="button" value="easy" name="button" onclick="filterFunction(this.value)">Easy</button>
+      <button class="btn btn-sm btn-secondary" type="button" value="medium" name="button" onclick="filterFunction(this.value)">Medium</button>
+      <button class="btn btn-sm btn-secondary" type="button" value="hard" name="button" onclick="filterFunction(this.value)">Hard</button>
     </div>
 
     <div class="block2">
-      <button class="btn btn-sm btn-success" type="button" name="button">Clear Filters</button>
+      <button class="btn btn-sm btn-success clear" type="button" name="button" onclick="clearFilters()">Clear Filters</button>
     </div>
 
     <div class="block3">
@@ -28,57 +23,44 @@
           <a href="/others" class="navbtn btn btn-secondary" type="button">Others</a>
         </form>
     </div>
-
   </div>
 
-<table id="myTable" class="table">
-  <thead>
-    <tr class="header">
-      <th scope="col"></th>
-      <th scope="col">Word</th>
-      <th scope="col">Added</th>
-      <th scope="col">Frequency</th>
-      <th scope="col">Status</th>
-      <th scope="col">Change Status</th>
-      <th scope="col">Delete</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% nounsList.forEach(function(item){ %>
-      <tr>
-        <th scope="row"></th>
-          <td><%= item.word %></td>
-          <td><%= item.timeStamp.toDateString() %></td>
-          <td>
-              <%= item.frequency %>
+  <table id="myTable" class="table">
+      <tr class="header">
+        <th class="col1" scope="col">Word</th>
+        <th scope="col">Frequency<button class="btn btn-sm btn-secondary frequencyBtn" onclick="sortTable()">Most</button></th>
+        <th scope="col">Status</th>
+        <th scope="col">Change Status</th>
+        <th scope="col">Delete</th>
+      </tr>
+      <% nounsList.forEach(function(item){ %>
+        <tr>
+            <td><%= item.word %></td>
+            <td><%= item.frequency %></td>
+            <td><%= item.status%></td>
+            <td>
+              <form class="trafficLightForm" action="/redNoun" method="post">
+                <input name="inputId" value=<%= item._id %> type="hidden"></input>
+                <button class="btn statusBtn btn-danger" type="submit">+</button>
+              </form>
+              <form class="trafficLightForm" action="/yellowNoun" method="post">
+                <input name="inputId" value=<%= item._id %> type="hidden"></input>
+                <button class="btn statusBtn btn-warning" type="submit">+</button>
+              </form>
+              <form class="trafficLightForm" action="/greenNoun" method="post">
+                <input name="inputId" value=<%= item._id %> type="hidden"></input>
+                <button class="btn statusBtn btn-success" type="submit">+</button>
+              </form>
             </td>
-          <td>
-            <%= item.status%>
-          </td>
-          <td>
-            <form class="trafficLightForm" action="/redNoun" method="post">
-              <input name="inputId" value=<%= item._id %> type="hidden"></input>
-              <button class="btn statusBtn btn-danger" type="submit">+</button>
-            </form>
-            <form class="trafficLightForm" action="/yellowNoun" method="post">
-              <input name="inputId" value=<%= item._id %> type="hidden"></input>
-              <button class="btn statusBtn btn-warning" type="submit">+</button>
-            </form>
-            <form class="trafficLightForm" action="/greenNoun" method="post">
-              <input name="inputId" value=<%= item._id %> type="hidden"></input>
-              <button class="btn statusBtn btn-success" type="submit">+</button>
-            </form>
-          </td>
-          <td>
-            <form class="trafficLightForm" action="/deleteNoun" method="post">
-              <input name="inputId" value=<%= item._id %> type="hidden"></input>
-              <button class="btn statusBtn btn-outline-danger deleteBtn" type="submit">X</button>
-            </form>
-          </td>
-        </tr>
-    <% }) %>
-  </tbody>
-</table>
+            <td>
+              <form class="trafficLightForm" action="/deleteNoun" method="post">
+                <input name="inputId" value=<%= item._id %> type="hidden"></input>
+                <button class="btn statusBtn btn-outline-danger deleteBtn" type="submit">X</button>
+              </form>
+            </td>
+          </tr>
+      <% }) %>
+  </table>
 </div>
 
 
