@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const ejs = require('ejs');
@@ -8,7 +9,7 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const Chart = require('chart.js');
 const ObjectId = require('mongodb').ObjectID;
 
-
+const password = process.env.PASSWORD;
 
 const Schema = mongoose.Schema;
 
@@ -27,7 +28,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb://localhost:27017/germanDB", {
+mongoose.connect("mongodb+srv://admin-eric:"+password+"@cluster0.2ml2m.mongodb.net/vocabDB", {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -604,17 +605,17 @@ app.post('/deleteOther', function(req, res){
   res.redirect('/others')
 });
 
-// $elemMatch: {_id: ObjectId(req.body.inputId)}
+//////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 
+let port = process.env.PORT;
+if (port == null || port == "") {
+  port = 3000;
+}
+app.listen(port);
 
 
-
-
-
-
-
-
-app.listen(3000, ()=> console.log("Listening on Port 3000"));
+app.listen(port, ()=> console.log("Server has started successfully"));
